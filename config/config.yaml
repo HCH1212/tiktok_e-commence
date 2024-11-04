@@ -1,0 +1,12 @@
+server:
+  port: 8080
+datasource:
+  host: 127.0.0.1
+  port: 3306
+  database: my
+  username: root
+  password: "041212"
+  charset: utf8mb4
+jwt:
+  accessTokenKey: "i love you"
+  refreshTokenKey: "forever"
