@@ -5,14 +5,14 @@ go 1.23.2
 require (
 	github.com/cloudwego/hertz v0.9.3
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/hertz-contrib/sessions v1.0.3
+	github.com/joho/godotenv v1.5.1
 	github.com/spf13/viper v1.19.0
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
 )
 
 require (
-	github.com/HCH1212/myKitex v0.0.0-20241104123227-6722419eac94 // indirect
-	github.com/HCH1212/tiktok_e-commence_rpc v0.0.0-20241104134530-a161bd5de809 // indirect
 	github.com/bytedance/go-tagexpr/v2 v2.9.2 // indirect
 	github.com/bytedance/gopkg v0.1.1 // indirect
 	github.com/bytedance/sonic v1.12.2 // indirect
@@ -25,6 +25,10 @@ require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
+	github.com/gomodule/redigo v1.8.9 // indirect
+	github.com/gorilla/context v1.1.2 // indirect
+	github.com/gorilla/securecookie v1.1.2 // indirect
+	github.com/gorilla/sessions v1.2.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/henrylee2cn/ameda v1.4.10 // indirect
 	github.com/henrylee2cn/goutil v0.0.0-20210127050712-89660552f6f8 // indirect

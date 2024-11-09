@@ -6,23 +6,43 @@ import (
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/hertz-contrib/sessions"
+	"github.com/hertz-contrib/sessions/redis"
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
+	"os"
+	"tiktok_e-commence/api"
+	"tiktok_e-commence/middleware"
 )
 
-func InitRouter() {
-	port := viper.GetString("server.port")
-	if port == "" {
-		port = "8888"
-	}
-	h := server.Default(server.WithHostPorts(":" + port))
+func Router() {
+	_ = godotenv.Load()
 
-	//h.POST("/register", service.Register)          //注册
-	//h.POST("/token", service.Login)                //登陆并获取双token
-	//h.POST("token/refresh", service.RefreshToken)  //刷新token
-	//h.GET("/info", middleWare.Token, service.Info) // 测试鉴权中间件，鉴权后可获取用户信息
-	//h.Use(middleWare.Token)
+	h := server.Default(server.WithHostPorts(viper.GetString("server.port")))
 
-	//test
+	store, _ := redis.NewStore(10, "tcp", viper.GetString("redis.addr"), "", []byte(os.Getenv("SESSION_SECRET")))
+	h.Use(sessions.New("tiktok_e-commence", store))
+
+	middleware.Register(h)
+
+	h.LoadHTMLGlob("template/*")
+	h.Static("static", "./")
+
+	h.GET("/", api.Home)
+	h.GET("/sign-in", func(ctx context.Context, c *app.RequestContext) { // 登陆
+		data := utils.H{"Title": "Sign In", "Next": c.Query("next")}
+		c.HTML(consts.StatusOK, "sign-in", data)
+	})
+	h.GET("/sign-up", func(ctx context.Context, c *app.RequestContext) { // 注册
+		c.HTML(consts.StatusOK, "sign-up", utils.H{"Title": "Sign Up"})
+	})
+	h.GET("/about", func(ctx context.Context, c *app.RequestContext) {
+		c.HTML(consts.StatusOK, "about", utils.H{"Title": "About"})
+	})
+	h.POST("/auth/login", api.Login)
+	h.POST("/auth/register", api.Register)
+	h.POST("/auth/logout", api.Logout)
+
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, utils.H{"message": "pong"})
 	})
