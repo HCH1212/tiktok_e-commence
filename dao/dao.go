@@ -8,6 +8,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
+	"tiktok_e-commence/model"
 )
 
 var DB *gorm.DB
@@ -34,10 +35,10 @@ func InitMysql() {
 		log.Println(err)
 	}
 	DB = db
-	//err = DB.AutoMigrate(&model.User{}) //自动生成表
-	//if err != nil {
-	//	log.Println(err)
-	//}
+	err = DB.AutoMigrate(&model.User{}) //自动迁移表
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func InitRedis() {

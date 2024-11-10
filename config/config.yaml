@@ -7,8 +7,7 @@ datasource:
   username: root
   password: "041212"
   charset: utf8mb4
-jwt:
-  accessTokenKey: "i love you"
-  refreshTokenKey: "forever"
 redis:
   addr: "localhost:6380"
+consul:
+  addr: "127.0.0.1:8500"
