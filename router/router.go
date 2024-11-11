@@ -9,6 +9,8 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"tiktok_e-commence/api"
+	"tiktok_e-commence/middleware"
+	"tiktok_e-commence/resp"
 )
 
 func InitRouter() {
@@ -17,8 +19,13 @@ func InitRouter() {
 
 	u := h.Group("/user")
 	{
-		u.POST("/register", api.Register)
-		u.POST("/login", api.Login)
+		u.POST("/register", api.Register)   // 注册
+		u.POST("/login", api.Login)         // 登陆并获取双Token
+		u.POST("refresh", api.RefreshToken) // 用refreshToken刷新双Token
+		u.GET("/info", middleware.Auth, func(ctx context.Context, c *app.RequestContext) {
+			res, _ := c.Get("ping")
+			resp.Success(c, "ok", res.(string))
+		}) // 测试鉴权中间件
 	}
 
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
