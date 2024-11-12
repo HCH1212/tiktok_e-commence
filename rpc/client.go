@@ -7,17 +7,21 @@ import (
 	consul "github.com/kitex-contrib/registry-consul"
 	"github.com/spf13/viper"
 	"log"
+	"sync"
 )
 
 var (
 	err        error
 	AuthClient authservice.Client
 	UserClient userservice.Client
+	one        sync.Once
 )
 
 func InitClient() {
-	initAuthClient()
-	initUserClient()
+	one.Do(func() {
+		initAuthClient()
+		initUserClient()
+	})
 }
 
 func common() discovery.Resolver {
