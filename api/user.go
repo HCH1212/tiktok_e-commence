@@ -10,8 +10,7 @@ import (
 
 func Register(ctx context.Context, c *app.RequestContext) {
 	err := service.RegisterService(ctx, c)
-	// TODO 用户不存在时，err应该是第一个，但不知道为什么有时候会出现第二个err，所以一起处理（应该是服务注册的复用端口问题）
-	if err != nil && (err.Error() == "remote or network error[remote]: biz error: 用户已存在" || err.Error() == "remote or network error[remote]: unknown method Register") {
+	if err != nil && err.Error() == "remote or network error[remote]: biz error: 用户已存在" {
 		resp.Fail(c, "用户已存在", nil)
 		return
 	}
