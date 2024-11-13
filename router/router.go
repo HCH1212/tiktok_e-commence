@@ -28,6 +28,15 @@ func InitRouter() {
 		}) // 测试鉴权中间件
 	}
 
+	p := h.Group("/product")
+	{
+		p.POST("/add", api.CreateProduct)    // 添加商品
+		p.POST("/update", api.ChangeProduct) // 更新商品
+		p.POST("/delete", api.DeleteProduct) // 删除商品
+		p.GET("/find", api.FindProduct)      // 精准查找某个商品bySUK
+		p.GET("/search", api.FindProducts)   // 模糊搜索商品
+	}
+
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, utils.H{"message": "pong"})
 	})

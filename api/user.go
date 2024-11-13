@@ -8,19 +8,6 @@ import (
 	"tiktok_e-commence/service"
 )
 
-func Register(ctx context.Context, c *app.RequestContext) {
-	err := service.RegisterService(ctx, c)
-	if err != nil && err.Error() == "remote or network error[remote]: biz error: 用户已存在" {
-		resp.Fail(c, "用户已存在", nil)
-		return
-	}
-	if err != nil {
-		resp.FailButServer(c, "rpc error", nil)
-		return
-	}
-	resp.Success(c, "register success", nil)
-}
-
 func Login(ctx context.Context, c *app.RequestContext) {
 	res, err := service.LoginService(ctx, c)
 	if err != nil {
@@ -31,6 +18,15 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		"accessToken":  res.AccessToken,
 		"refreshToken": res.RefreshToken,
 	})
+}
+
+func Register(ctx context.Context, c *app.RequestContext) {
+	err := service.RegisterService(ctx, c)
+	if err != nil {
+		resp.FailButServer(c, err.Error(), nil)
+		return
+	}
+	resp.Success(c, "register success", nil)
 }
 
 func RefreshToken(ctx context.Context, c *app.RequestContext) {
