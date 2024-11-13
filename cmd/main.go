@@ -10,4 +10,5 @@ func main() {
 	config.InitConfig()
 	rpc.InitClient()
 	router.InitRouter()
+
 }
