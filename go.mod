@@ -3,7 +3,7 @@ module tiktok_e-commence
 go 1.23.2
 
 require (
-	github.com/HCH1212/tiktok_e-commence_rpc v0.0.0-20241113063549-7bf42d49aa4f
+	github.com/HCH1212/tiktok_e-commence_rpc v0.0.0-20241113144958-a2f188aa20c5
 	github.com/cloudwego/hertz v0.9.3
 	github.com/cloudwego/kitex v0.11.3
 	github.com/joho/godotenv v1.5.1

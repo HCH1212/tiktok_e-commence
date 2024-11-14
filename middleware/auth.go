@@ -24,12 +24,8 @@ func Auth(ctx context.Context, c *app.RequestContext) {
 		resp.FailButServer(c, "权限不足", nil)
 		return
 	}
-	if !res.Pass {
-		resp.Fail(c, "权限不足", nil)
-		return
-	}
 
-	// 鉴权成功, 写一个上下文便于测试
-	c.Set("ping", "pong")
+	// 鉴权成功, 将用户id设置为上下文
+	c.Set("id", res.Id)
 	c.Next(ctx)
 }

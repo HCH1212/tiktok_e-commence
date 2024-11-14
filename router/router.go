@@ -23,7 +23,7 @@ func InitRouter() {
 		u.POST("/login", api.Login)         // 登陆并获取双Token
 		u.POST("refresh", api.RefreshToken) // 用refreshToken刷新双Token
 		u.GET("/info", middleware.Auth, func(ctx context.Context, c *app.RequestContext) {
-			res, _ := c.Get("ping")
+			res, _ := c.Get("id")
 			resp.Success(c, "ok", res.(string))
 		}) // 测试鉴权中间件
 	}
@@ -35,6 +35,14 @@ func InitRouter() {
 		p.POST("/delete", api.DeleteProduct) // 删除商品
 		p.GET("/find", api.FindProduct)      // 精准查找某个商品bySUK
 		p.GET("/search", api.FindProducts)   // 模糊搜索商品
+	}
+
+	c := h.Group("cart", middleware.Auth)
+	{
+		c.POST("/add", api.AddItem)      // 添加商品到购物车
+		c.POST("delete", api.DeleteItem) // 删除购物车里的某个商品
+		c.POST("empty", api.EmptyCart)   // (物理)清空购物车
+		c.GET("get", api.GetCart)        // 查看购物车里的商品
 	}
 
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
