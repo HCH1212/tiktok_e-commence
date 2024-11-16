@@ -12,7 +12,7 @@ type Product struct {
 	gorm.Model
 	SUK         string   `json:"suk"`
 	Name        string   `json:"name"`
-	Price       int64    `json:"price"`
+	Price       float32  `json:"price"`
 	Description string   `json:"description"`
 	Picture     string   `json:"picture"`
 	Category    []string `json:"category"`
@@ -21,8 +21,14 @@ type Product struct {
 type ProductResp struct {
 	SUK         string   `json:"suk"`
 	Name        string   `json:"name"`
-	Price       int64    `json:"price"`
+	Price       float32  `json:"price"`
 	Description string   `json:"description"`
 	Picture     string   `json:"picture"`
 	Category    []string `json:"category"`
+}
+
+type Order struct {
+	SUK     string `json:"suk"`
+	Address string `json:"address"`
+	IsPay   bool   `json:"is_pay"`
 }

@@ -24,7 +24,7 @@ func InitRouter() {
 		u.POST("refresh", api.RefreshToken) // 用refreshToken刷新双Token
 		u.GET("/info", middleware.Auth, func(ctx context.Context, c *app.RequestContext) {
 			res, _ := c.Get("id")
-			resp.Success(c, "ok", res.(string))
+			resp.Success(c, "ok", res.(uint64))
 		}) // 测试鉴权中间件
 	}
 
@@ -37,12 +37,24 @@ func InitRouter() {
 		p.GET("/search", api.FindProducts)   // 模糊搜索商品
 	}
 
-	c := h.Group("cart", middleware.Auth)
+	c := h.Group("/cart", middleware.Auth)
 	{
-		c.POST("/add", api.AddItem)      // 添加商品到购物车
-		c.POST("delete", api.DeleteItem) // 删除购物车里的某个商品
-		c.POST("empty", api.EmptyCart)   // (物理)清空购物车
-		c.GET("get", api.GetCart)        // 查看购物车里的商品
+		c.POST("/add", api.AddItem)       // 添加商品到购物车
+		c.POST("/delete", api.DeleteItem) // 删除购物车里的某个商品
+		c.POST("/empty", api.EmptyCart)   // (物理)清空购物车
+		c.GET("/get", api.GetCart)        // 查看购物车里的商品
+	}
+
+	o := h.Group("/order", middleware.Auth)
+	{
+		o.POST("/create", api.CreateOrder) // 创建订单
+		o.GET("/list", api.ListOrder)      // 查看用户订单
+		o.POST("/pay", api.IsPaidOrder)    // 设置订单已支付
+	}
+
+	pay := h.Group("/payment", middleware.Auth)
+	{
+		pay.POST("/charge", api.Charge) // 支付
 	}
 
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
