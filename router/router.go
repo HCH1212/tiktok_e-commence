@@ -6,16 +6,24 @@ import (
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/hertz-contrib/monitor-prometheus"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"tiktok_e-commence/api"
+	"tiktok_e-commence/common/mtl"
 	"tiktok_e-commence/middleware"
 	"tiktok_e-commence/resp"
 )
 
 func InitRouter() {
+	// prometheus指标加到hertz
+	r, registerInfo := mtl.InitMetric("hertz", ":9992", viper.GetString("consul.addr"))
+	defer r.Deregister(registerInfo)
+
 	_ = godotenv.Load() // 加载环境变量.env
-	h := server.Default(server.WithHostPorts(viper.GetString("server.port")))
+	h := server.Default(server.WithHostPorts(viper.GetString("server.port")),
+		server.WithTracer(prometheus.NewServerTracer("", "", prometheus.WithDisableServer(true), prometheus.WithRegistry(mtl.Registry))),
+	)
 
 	u := h.Group("/user")
 	{

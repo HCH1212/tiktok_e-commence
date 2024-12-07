@@ -50,7 +50,7 @@ func RegisterService(ctx context.Context, c *app.RequestContext) error {
 	_, err := rpc.UserClient.Register(ctx, &user.RegisterReq{Email: email, Password: password, PasswordAgain: passwordAgain})
 	if err != nil {
 		log.Println(err)
-		if err.Error() == "remote or network error[remote]: biz error: 用户已存在" {
+		if err.Error() == "remote or network error: rpc error: code = 13 desc = 用户已存在 [biz error]" {
 			return errors.New("用户已存在")
 		}
 		return errors.New("rpc error")
