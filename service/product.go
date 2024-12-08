@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/HCH1212/tiktok_e-commence_rpc/gen/kitex_gen/product"
 	"github.com/cloudwego/hertz/pkg/app"
-	"log"
+	"github.com/sirupsen/logrus"
 	"strconv"
 	"tiktok_e-commence/model"
 	"tiktok_e-commence/rpc"
@@ -26,7 +26,7 @@ func CreateProductService(ctx context.Context, c *app.RequestContext) (resp *pro
 		Category:    pro.Category,
 	})
 	if err != nil {
-		log.Println(err)
+		logrus.Println(err)
 		if err.Error() == "remote or network error[remote]: biz error: 商品已存在" {
 			return nil, errors.New("商品已存在")
 		}
@@ -51,7 +51,7 @@ func ChangeProductService(ctx context.Context, c *app.RequestContext) (resp *pro
 		Category:    pro.Category,
 	})
 	if err != nil {
-		log.Println(err)
+		logrus.Println(err)
 		if err.Error() == "remote or network error[remote]: biz error: 商品不存在" {
 			return nil, errors.New("商品不存在")
 		}
@@ -65,7 +65,7 @@ func DeleteProductService(ctx context.Context, c *app.RequestContext) (bool, err
 	id, _ := strconv.Atoi(c.PostForm("id"))
 	res, err := rpc.ProductClient.DeleteProduct(ctx, &product.ProductId{Id: uint64(id)})
 	if err != nil || !res.Pass {
-		log.Println(err)
+		logrus.Println(err)
 		return false, errors.New("rpc error")
 	}
 	return true, nil
@@ -75,7 +75,7 @@ func FindProductService(ctx context.Context, c *app.RequestContext) (resp *model
 	suk := c.PostForm("suk")
 	res, err := rpc.ProductClient.FindProduct(ctx, &product.ProductSUK{SUK: suk})
 	if err != nil {
-		log.Println(err)
+		logrus.Println(err)
 		if err.Error() == "remote or network error[remote]: biz error: 商品不存在" {
 			return nil, errors.New("商品不存在")
 		}
@@ -96,7 +96,7 @@ func FindProductsService(ctx context.Context, c *app.RequestContext) (resp []*mo
 	name := c.PostForm("name")
 	res, err := rpc.ProductClient.FindProducts(ctx, &product.SearchReq{Name: name})
 	if err != nil {
-		log.Println(err)
+		logrus.Println(err)
 		if err.Error() == "remote or network error[remote]: biz error: 商品不存在" {
 			return nil, errors.New("商品不存在")
 		}

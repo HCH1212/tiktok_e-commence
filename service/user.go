@@ -6,7 +6,7 @@ import (
 	"github.com/HCH1212/tiktok_e-commence_rpc/gen/kitex_gen/auth"
 	"github.com/HCH1212/tiktok_e-commence_rpc/gen/kitex_gen/user"
 	"github.com/cloudwego/hertz/pkg/app"
-	"log"
+	"github.com/sirupsen/logrus"
 	"strings"
 	"tiktok_e-commence/rpc"
 )
@@ -19,7 +19,7 @@ func LoginService(ctx context.Context, c *app.RequestContext) (resp *auth.TwoTok
 	}
 	res, err := rpc.UserClient.Login(ctx, &user.LoginReq{Email: email, Password: password})
 	if err != nil {
-		log.Println("login:", err)
+		logrus.Println("login:", err)
 		if err.Error() == "remote or network error[remote]: biz error: 用户不存在" {
 			return nil, errors.New("用户不存在")
 		}
@@ -31,7 +31,7 @@ func LoginService(ctx context.Context, c *app.RequestContext) (resp *auth.TwoTok
 	// 获取双Token
 	resp, err = rpc.AuthClient.GetToken(ctx, &auth.UserId{Id: res.Id})
 	if err != nil {
-		log.Println("get token:", err)
+		logrus.Println("get token:", err)
 		return nil, errors.New("rpc error")
 	}
 	return
@@ -49,7 +49,7 @@ func RegisterService(ctx context.Context, c *app.RequestContext) error {
 	}
 	_, err := rpc.UserClient.Register(ctx, &user.RegisterReq{Email: email, Password: password, PasswordAgain: passwordAgain})
 	if err != nil {
-		log.Println(err)
+		logrus.Println(err)
 		if err.Error() == "remote or network error: rpc error: code = 13 desc = 用户已存在 [biz error]" {
 			return errors.New("用户已存在")
 		}
@@ -67,7 +67,7 @@ func RefreshService(ctx context.Context, c *app.RequestContext) (resp *auth.TwoT
 
 	resp, err = rpc.AuthClient.ExecRefreshToken(ctx, &auth.RefreshToken{RefreshToken: string(refreshToken)})
 	if err != nil {
-		log.Println(err)
+		logrus.Println(err)
 		return nil, errors.New("rpc error")
 	}
 	return

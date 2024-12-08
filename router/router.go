@@ -7,6 +7,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/monitor-prometheus"
+	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 	"tiktok_e-commence/api"
@@ -20,10 +21,17 @@ func InitRouter() {
 	r, registerInfo := mtl.InitMetric("hertz", ":9992", viper.GetString("consul.addr"))
 	defer r.Deregister(registerInfo)
 
+	// 链路追踪
+	t := mtl.InitTracing("tiktok_e-commence")
+	defer t.Shutdown(context.Background())
+	tracer, cfg := hertztracing.NewServerTracer()
+
 	_ = godotenv.Load() // 加载环境变量.env
 	h := server.Default(server.WithHostPorts(viper.GetString("server.port")),
 		server.WithTracer(prometheus.NewServerTracer("", "", prometheus.WithDisableServer(true), prometheus.WithRegistry(mtl.Registry))),
+		tracer,
 	)
+	h.Use(hertztracing.ServerMiddleware(cfg))
 
 	u := h.Group("/user")
 	{

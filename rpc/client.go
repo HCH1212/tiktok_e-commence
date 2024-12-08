@@ -14,21 +14,21 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	consulclient "github.com/kitex-contrib/config-consul/client"
 	consulconfig "github.com/kitex-contrib/config-consul/consul"
-	"log"
+	"github.com/sirupsen/logrus"
 	"tiktok_e-commence/common/clientsuite"
 )
 
 func initAuthClient() {
 	AuthClient, err = authservice.NewClient("auth", client.WithSuite(clientsuite.CommonClientSuite{CurrentServiceName: "auth"}))
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 }
 
 func initUserClient() {
 	UserClient, err = userservice.NewClient("user", client.WithSuite(clientsuite.CommonClientSuite{CurrentServiceName: "user"}))
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 }
 
@@ -60,27 +60,27 @@ func initProductClient() {
 
 	ProductClient, err = productcatalogservice.NewClient("product", opts...)
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 }
 
 func initCartClient() {
 	CartClient, err = cartservice.NewClient("cart", client.WithSuite(clientsuite.CommonClientSuite{CurrentServiceName: "cart"}))
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 }
 
 func initOrderClient() {
 	OrderClient, err = orderservice.NewClient("order", client.WithSuite(clientsuite.CommonClientSuite{CurrentServiceName: "order"}))
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 }
 
 func initPaymentClient() {
 	PaymentClient, err = paymentservice.NewClient("payment", client.WithSuite(clientsuite.CommonClientSuite{CurrentServiceName: "payment"}))
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 }

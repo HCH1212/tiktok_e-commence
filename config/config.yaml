@@ -11,3 +11,9 @@ redis:
   addr: "localhost:6380"
 consul:
   addr: "127.0.0.1:8500"
+logger:
+  level: info
+  prefix: '[blog]'
+  director: log
+  show_line: true
+  log_in_console: true
