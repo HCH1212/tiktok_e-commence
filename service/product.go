@@ -27,7 +27,7 @@ func CreateProductService(ctx context.Context, c *app.RequestContext) (resp *pro
 	})
 	if err != nil {
 		logrus.Println(err)
-		if err.Error() == "remote or network error[remote]: biz error: 商品已存在" {
+		if err.Error() == "remote or network error: rpc error: code = 13 desc = 商品已存在 [biz error]" {
 			return nil, errors.New("商品已存在")
 		}
 		return nil, errors.New("rpc error")
@@ -52,7 +52,7 @@ func ChangeProductService(ctx context.Context, c *app.RequestContext) (resp *pro
 	})
 	if err != nil {
 		logrus.Println(err)
-		if err.Error() == "remote or network error[remote]: biz error: 商品不存在" {
+		if err.Error() == "remote or network error: rpc error: code = 13 desc = 商品不存在 [biz error]" {
 			return nil, errors.New("商品不存在")
 		}
 		return nil, errors.New("rpc error")
@@ -76,7 +76,7 @@ func FindProductService(ctx context.Context, c *app.RequestContext) (resp *model
 	res, err := rpc.ProductClient.FindProduct(ctx, &product.ProductSUK{SUK: suk})
 	if err != nil {
 		logrus.Println(err)
-		if err.Error() == "remote or network error[remote]: biz error: 商品不存在" {
+		if err.Error() == "remote or network error: rpc error: code = 13 desc = 商品不存在 [biz error]" {
 			return nil, errors.New("商品不存在")
 		}
 		return nil, errors.New("rpc error")
@@ -97,7 +97,7 @@ func FindProductsService(ctx context.Context, c *app.RequestContext) (resp []*mo
 	res, err := rpc.ProductClient.FindProducts(ctx, &product.SearchReq{Name: name})
 	if err != nil {
 		logrus.Println(err)
-		if err.Error() == "remote or network error[remote]: biz error: 商品不存在" {
+		if err.Error() == "remote or network error: rpc error: code = 13 desc = 商品不存在 [biz error]" {
 			return nil, errors.New("商品不存在")
 		}
 		return nil, errors.New("rpc error")

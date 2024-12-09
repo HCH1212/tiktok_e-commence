@@ -20,10 +20,10 @@ func LoginService(ctx context.Context, c *app.RequestContext) (resp *auth.TwoTok
 	res, err := rpc.UserClient.Login(ctx, &user.LoginReq{Email: email, Password: password})
 	if err != nil {
 		logrus.Println("login:", err)
-		if err.Error() == "remote or network error[remote]: biz error: 用户不存在" {
+		if err.Error() == "remote or network error: rpc error: code = 13 desc = 用户不存在 [biz error]" {
 			return nil, errors.New("用户不存在")
 		}
-		if err.Error() == "remote or network error[remote]: biz error: 密码错误" {
+		if err.Error() == "remote or network error: rpc error: code = 13 desc = 密码错误 [biz error]" {
 			return nil, errors.New("密码错误")
 		}
 		return nil, errors.New("rpc error")
