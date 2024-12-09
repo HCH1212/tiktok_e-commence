@@ -18,6 +18,7 @@
 14. logrus自定义log
 15. blackbox监控
 16. altermanager警报
+17. nats消息发布与订阅
 
 #### 参考： <https://space.bilibili.com/3494360534485730>
 <https://github.com/cloudwego/biz-demo/blob/main/gomall>
